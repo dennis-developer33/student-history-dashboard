@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Student History Dashboard - Sprint 5</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      margin: 0;
+      height: 100vh;
+      background: #f5f7fb;
+      color: #333;
+    }
+    h2 { margin-top: 0; font-size: 1.25rem; font-weight: 600; color: #1e293b; }
+
+    /* Sidebar */
+    .sidebar {
+      width: 260px;
+      background: linear-gradient(180deg, #2563eb, #1e3a8a);
+      padding: 25px 20px;
+      box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+      color: white;
+      display: flex;
+      flex-direction: column;
+    }
+    .sidebar h2 { font-size: 1rem; margin-bottom: 20px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; opacity: 0.9; }
+    .sidebar label { display: block; margin-top: 15px; font-size: 0.85rem; opacity: 0.9; font-weight: 500; }
+    .sidebar input, .sidebar select, .sidebar button {
+      width: 100%; margin-top: 6px; padding: 10px 12px; border-radius: 8px; border: none; font-size: 14px; box-sizing: border-box; transition: 0.2s;
+    }
+    .sidebar input, .sidebar select { border: 1px solid #e2e8f0; color: #333; }
+    .sidebar input:focus, .sidebar select:focus { border-color: #2563eb; outline: none; box-shadow: 0 0 0 3px rgba(37,99,235,0.2); }
+    .sidebar button { margin-top: 20px; font-weight: 600; cursor: pointer; background: #fbbf24; color: #222; }
+    .sidebar button:hover { background: #f59e0b; transform: translateY(-1px); }
+    .sidebar button.reset { background: #6b7280; color: white; }
+    .sidebar button.reset:hover { background: #4b5563; }
+
+    /* Main content */
+    .main { flex: 1; padding: 25px; overflow-x: auto; }
+
+    /* View Toggle Buttons */
+    .view-toggle { margin-bottom: 20px; }
+    .view-toggle button { margin-right: 10px; padding: 8px 16px; cursor: pointer; border-radius: 6px; border: none; font-weight: 500; transition: 0.2s; }
+    .view-toggle button.active { background: #2563eb; color: white; }
+    .view-toggle button.inactive { background: #fbbf24; color: #222; }
+
+    /* Summary Cards */
+    .summary { display: flex; flex-wrap: wrap; gap: 20px; margin-bottom: 25px; }
+    .card { flex: 1; min-width: 180px; padding: 20px; background: linear-gradient(145deg, #ffffff, #f1f5f9); border-radius: 14px; box-shadow: 0 6px 16px rgba(0,0,0,0.08); text-align: center; transition: all 0.3s ease; }
+    .card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.12); }
+    .card h3 { margin: 0; font-size: 0.95rem; font-weight: 600; color: #475569; }
+    .card p { margin: 8px 0 0; font-size: 1.5rem; font-weight: bold; color: #2563eb; }
+
+    /* Tables */
+    table { width: 100%; border-collapse: collapse; border-radius: 10px; overflow: hidden; background: white; margin-bottom: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+    th, td { padding: 14px 16px; text-align: left; font-size: 14px; }
+    th { background: #f1f5f9; font-weight: 600; color: #334155; position: sticky; top: 0; z-index: 2; }
+    tr:nth-child(even) { background: #fafafa; }
+    tr:hover { background: #f0f9ff; transition: background 0.2s; }
+
+    /* Pagination Controls */
+    .pagination-controls { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+    .pagination-controls button { padding: 6px 12px; cursor: pointer; border-radius: 6px; border: none; background: #2563eb; color: white; font-weight: 500; }
+    .pagination-controls button:hover { background: #1e40af; }
+    /* Back to Top Button */
+  #back-to-top {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    padding: 10px 15px;
+    font-size: 16px;
+    border: none;
+    border-radius: 50%;
+    background: #2563eb;
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    /* display: none; */
+    transition: 0.3s;
+    z-index: 999;
+  }
+  #back-to-top:hover {
+    background: #1e40af;
+    transform: translateY(-2px);
+  }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      body { flex-direction: column; }
+      .sidebar { width: 100%; flex-direction: row; flex-wrap: wrap; justify-content: space-between; }
+      .sidebar h2 { flex-basis: 100%; }
+      .main { padding: 15px; }
+      .summary { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <h2>Filters</h2>
+    <label for="trno">TRNO</label>
+    <input type="text" id="trno" placeholder="Enter TRNO">
+
+    <label for="class">Class</label>
+    <select id="class">
+      <option value="">All Classes</option>
+      <option value="Darajah1">Darajah1</option>
+      <option value="Darajah2">Darajah2</option>
+      <option value="Darajah3">Darajah3</option>
+      <option value="Darajah4">Darajah4</option>
+      <option value="Darajah5">Darajah5</option>
+      <option value="Darajah6">Darajah6</option>
+      <option value="Darajah7">Darajah7</option>
+      <option value="Darajah8">Darajah8</option>
+      <option value="Darajah9">Darajah9</option>
+      <option value="Darajah10">Darajah10</option>
+      <option value="Darajah11">Darajah11</option>
+    </select>
+
+    <label for="from-date">From Date</label>
+    <input type="date" id="from-date">
+
+    <label for="to-date">To Date</label>
+    <input type="date" id="to-date">
+
+    <button onclick="applyFilters()">Apply Filters</button>
+    <button onclick="resetFilters()" class="reset">Reset Filters</button>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main">
+    <!-- Summary Stats -->
+    <div class="summary">
+      <div class="card">
+        <h3>Total Visits</h3>
+        <p id="total-visits">0</p>
+      </div>
+      <div class="card">
+        <h3>Unique Sites</h3>
+        <p id="unique-sites">0</p>
+      </div>
+    </div>
+
+    <!-- View Toggle -->
+    <div class="view-toggle">
+      <button id="btn-detailed" class="active" onclick="showView('detailed')">Detailed View</button>
+      <button id="btn-summary" class="inactive" onclick="showView('summary')">Summary View</button>
+    </div>
+
+    <!-- Detailed View -->
+    <div id="detailed-view">
+      <h2>History Records</h2>
+      <div class="pagination-controls">
+        <button onclick="prevPage('history')">Previous</button>
+        <span id="history-page-number">1</span>
+        <button onclick="nextPage('history')">Next</button>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>TRNO</th>
+            <th>Full Name</th>
+            <th>Class</th>
+            <th>Website</th>
+            <th>Visit Date</th>
+          </tr>
+        </thead>
+        <tbody id="history-table"></tbody>
+      </table>
+    </div>
+
+    <!-- Summary View -->
+    <div id="summary-view" style="display:none;">
+      <h2>Daily Summary</h2>
+      <div class="pagination-controls">
+        <button onclick="prevPage('summary')">Previous</button>
+        <span id="summary-page-number">1</span>
+        <button onclick="nextPage('summary')">Next</button>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>TRNO</th>
+            <th>Full Name</th>
+            <th>Class</th>
+            <th>Website</th>
+            <th>Visit Date</th>
+            <th>Visit Count</th>
+          </tr>
+        </thead>
+        <tbody id="summary-table"></tbody>
+      </table>
+    </div>
+  </div>
+  <!-- Add this inside <body>, preferably at the end of .main -->
+<button id="back-to-top" onclick="scrollToTop()">↑ Top</button>
+
+  <script>
+    let historyPage = 1;
+    let summaryPage = 1;
+    const perPage = 50;
+    let currentView = 'detailed';
+
+    function showView(view) {
+      currentView = view;
+      document.getElementById('detailed-view').style.display = view === 'detailed' ? '' : 'none';
+      document.getElementById('summary-view').style.display = view === 'summary' ? '' : 'none';
+      document.getElementById('btn-detailed').className = view === 'detailed' ? 'active' : 'inactive';
+      document.getElementById('btn-summary').className = view === 'summary' ? 'active' : 'inactive';
+      fetchData();
+    }
+
+    async function fetchData(filters = {}) {
+      filters.trno = document.getElementById("trno").value;
+      filters.class = document.getElementById("class").value;
+      filters.from_date = document.getElementById("from-date").value;
+      filters.to_date = document.getElementById("to-date").value;
+
+      // Fetch stats
+      const statsRes = await fetch("/api/summary_stats?" + new URLSearchParams(filters));
+      const stats = await statsRes.json();
+      document.getElementById("total-visits").innerText = stats.total_visits;
+      document.getElementById("unique-sites").innerText = stats.unique_sites;
+
+      // Fetch table based on current view
+      if (currentView === 'detailed') {
+        filters.page = historyPage;
+        filters.per_page = perPage;
+        const res = await fetch("/api/history?" + new URLSearchParams(filters));
+        const data = await res.json();
+        const tbody = document.getElementById("history-table");
+        tbody.innerHTML = "";
+        data.forEach(row => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${row.id}</td>
+            <td>${row.trno}</td>
+            <td>${row.fullname}</td>
+            <td>${row.class}</td>
+            <td><a href="${row.website}" target="_blank" style="color:#2563eb; text-decoration:underline;">${row.website}</a></td>
+            <td>${row.visit_date}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+        document.getElementById("history-page-number").innerText = historyPage;
+      } else {
+        filters.page = summaryPage;
+        filters.per_page = perPage;
+        const res = await fetch("/api/summary?" + new URLSearchParams(filters));
+        const data = await res.json();
+        const tbody = document.getElementById("summary-table");
+        tbody.innerHTML = "";
+        data.forEach(row => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${row.trno}</td>
+            <td>${row.fullname}</td>
+            <td>${row.class}</td>
+            <td>${row.website}</td>
+            <td>${row.visit_date}</td>
+            <td>${row.visit_count}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+        document.getElementById("summary-page-number").innerText = summaryPage;
+      }
+    }
+
+    function applyFilters() {
+      historyPage = 1;
+      summaryPage = 1;
+      fetchData();
+    }
+
+    function resetFilters() {
+      document.getElementById("trno").value = "";
+      document.getElementById("class").value = "";
+      document.getElementById("from-date").value = "";
+      document.getElementById("to-date").value = "";
+      historyPage = 1;
+      summaryPage = 1;
+      fetchData();
+    }
+
+    function nextPage(type) {
+      if (type === 'history') { historyPage++; }
+      else if (type === 'summary') { summaryPage++; }
+      fetchData();
+    }
+
+    function prevPage(type) {
+      if (type === 'history' && historyPage > 1) { historyPage--; }
+      else if (type === 'summary' && summaryPage > 1) { summaryPage--; }
+      fetchData();
+    }
+
+    // Initial load
+    fetchData();
+    // Scroll to Top Feature
+  const backToTopButton = document.getElementById("back-to-top");
+  window.onscroll = function() {
+    if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+      backToTopButton.style.display = "block";
+    } else {
+      backToTopButton.style.display = "none";
+    }
+  };
+
+  function scrollToTop() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  </script>
+
+</body>
+</html>

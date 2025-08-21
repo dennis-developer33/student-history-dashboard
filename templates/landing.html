@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>MAMAL Computer Labs - Student History Dashboard</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: linear-gradient(135deg, #2563eb, #1e40af);
+      color: #fff;
+      text-align: center;
+    }
+    .container {
+      max-width: 600px;
+      padding: 40px;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 20px;
+      color: #fbbf24;
+    }
+    p {
+      font-size: 1.1rem;
+      margin-bottom: 30px;
+      line-height: 1.6;
+    }
+    button {
+      background: #fbbf24;
+      color: #1e3a8a;
+      border: none;
+      padding: 14px 30px;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    button:hover {
+      background: #f59e0b;
+      transform: translateY(-2px);
+    }
+    small {
+      display: block;
+      margin-top: 20px;
+      font-size: 0.85rem;
+      opacity: 0.8;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Welcome to MAMAL Computer Labs Dashboard</h1>
+    <p>
+      This dashboard allows lab administrators to view and monitor students’ web browsing history,
+      track daily visits, and analyze unique websites visited across the lab computers.
+    </p>
+    <button onclick="goToDashboard()">Go to Dashboard</button>
+    <small>Use responsibly. Student privacy must be respected.</small>
+  </div>
+
+<script>
+function goToDashboard() {
+  window.location.href = "/dashboard"; // Flask route
+}
+</script>
+</body>
+</html>
