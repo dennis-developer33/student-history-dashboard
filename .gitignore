@@ -3,18 +3,16 @@ __pycache__/
 *.pyc
 *.pyo
 *.pyd
-env/
-venv/
+*.env
 *.sqlite3
 
-# Flask / general
-instance/
-*.log
+# IDEs
+.vscode/
+.idea/
 
-# OS files
+# OS
 .DS_Store
 Thumbs.db
 
-# IDE files
-.vscode/
-.idea/
+# Logs
+*.log

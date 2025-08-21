@@ -3,16 +3,21 @@ from flask import Flask, request, jsonify, render_template, redirect, url_for
 import psycopg2
 import psycopg2.extras
 from datetime import datetime
+import os
+from dotenv import load_dotenv
+
+# Load environment variables from .env
+load_dotenv()
 
 app = Flask(__name__)
 
 def get_db_connection():
     return psycopg2.connect(
-        dbname="student_reports",
-        user="postgres",
-        password="root",
-        host="localhost",
-        port="5432"
+        dbname=os.environ.get("DB_NAME"),
+        user=os.environ.get("DB_USER"),
+        password=os.environ.get("DB_PASS"),
+        host=os.environ.get("DB_HOST"),
+        port=os.environ.get("DB_PORT", 5432)
     )
 
 # --- Landing page ---
@@ -159,4 +164,5 @@ def get_summary_stats():
     })
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    # Use host='0.0.0.0' for deployment (Render, Heroku, etc.)
+    app.run(debug=True, host='0.0.0.0', port=int(os.environ.get("PORT", 5000)))
