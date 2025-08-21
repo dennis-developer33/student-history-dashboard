@@ -84,6 +84,22 @@ def get_history():
 
     return jsonify([dict(r) for r in rows])
 
+@app.route("/test_db")
+def test_db():
+    try:
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute("SELECT COUNT(*) FROM history;")
+        count = cur.fetchone()[0]
+        cur.close()
+        conn.close()
+        return jsonify({"ok": True, "history_rows": count})
+    except Exception as e:
+        return jsonify({"ok": False, "error": str(e)})
+
+
+
+
 # --- API: Daily summary with pagination ---
 @app.route("/api/summary")
 def get_summary():
